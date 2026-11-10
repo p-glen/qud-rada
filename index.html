@@ -159,13 +159,13 @@ var CH=[
    blurb:'Mentor Sereny i jeden z najbardziej postępowych umysłów królestwa. To jego rady zmieniły lekkomyślną, niesforną dziewczynę w zdecydowaną królową.',
    themes:'równowaga między moralnością a postępem, sens nauki'},
   {id:'jilian',name:'Jilian',epi:'Jedwabny Tkacz',
-   blurb:'W Epoce Nieładu okazał się doradcą do wszystkiego: biegłym w służbie dyplomatycznej, a gdy trzeba, także w knuciu. Słowa i plany tka z równą wprawą.',
+   blurb:'W burzliwych latach przed koronacją królowej okazał się doradcą do wszystkiego: biegłym w służbie dyplomatycznej, a gdy trzeba, także w knuciu. Słowa i plany tka z równą wprawą.',
    themes:'dworskie intrygi i subtelna sztuka gier o władzę'},
   {id:'elinor',name:'Elinor',epi:'Heroldka Przeszłości',
-   blurb:'Jej ród jest tak stary jak samo królestwo, a samo nazwisko daje jej trwały wpływ wśród szlachty i w Kulcie Matki, wstrząsanym od lat Objawieniami Celestyny.',
+   blurb:'Jej ród jest tak stary jak samo królestwo, a samo nazwisko daje jej trwały wpływ wśród szlachty i w Kulcie Matki, wstrząsanym dziś sporami o wiarę.',
    themes:'sumienie kontra obowiązek polityczny, prawo religijne kontra świeckie'},
   {id:'xanthe',name:'Xanthe',epi:'Szkarłatna Tarcza',
-   blurb:'Niedawno wyniesiona do szlachty wojowniczka z rodu Enkhali, najlepsza przyjaciółka i prawa ręka królowej. Jej lud słynie z broni z Czerwonego Żelaza, ale w Ankist budzi lęk, kpiny i pogardę, bo Enkhali nie wierzą w Matkę.',
+   blurb:'Niedawno wyniesiona do szlachty wojowniczka z rodu Enkhali, najlepsza przyjaciółka i prawa ręka królowej. Jej lud, Enkhali, słynie z męstwa w boju, ale w Ankist budzi lęk, kpiny i pogardę, bo nie wierzy w Matkę.',
    themes:'cnota wojskowa, dziedzictwo kulturowe, integracja'},
   {id:'syd',name:'Syd',epi:'Dziki',
    blurb:'Nieufny, zaciekle niezależny szlachcic z głębokimi powiązaniami z przestępczym półświatkiem. Porusza się w cieniu, z zimną kalkulacją.',
@@ -185,47 +185,47 @@ var LINEUPS={
 /* Pytania. Każda odpowiedź daje punkt jednej wartości (indeks z IDE).
    Każda wartość pojawia się dokładnie 6 razy. */
 var Q=[
- {t:'Wojna w Konfurtah idzie źle. Żołnierze giną w białych piaskach, a Widram siedzi w niezdobytym Nidar Ilak. Jak wesprzeć front?',o:[
+ {t:'Wojna toczy się daleko od domu i idzie gorzej, niż zakładano. Żołnierze giną, brakuje wody i zapasów, a wróg siedzi w twierdzy, której nikt jeszcze nie zdobył. Jak wesprzeć front?',o:[
   [2,'Odwołać się do dawnych powinności szlachty i zażądać od wielkich rodów ludzi oraz zapasów, tak jak przed wiekami.'],
-  [0,'Zlecić uczonym nowe sposoby przetrwania na pustyni: studnie, uzdatnianie wody i lepsze lekarstwa.'],
-  [4,'Wysłać kolejne oddziały i uderzyć na Nidar Ilak, zanim Widram umocni się jeszcze bardziej.'],
-  [1,'Posłać agentów do pustynnych plemion i podkupić je przeciw Widramowi.']]},
- {t:'Zwolennicy Drogi Drabiny finansują wyprawy po relikty Imperium Słońca. Wierni Kultu Matki nazywają ich heretykami i żądają reakcji.',o:[
+  [0,'Zlecić uczonym nowe sposoby przetrwania w trudnym terenie: studnie, uzdatnianie wody i lepsze lekarstwa.'],
+  [4,'Wysłać kolejne oddziały i uderzyć na twierdzę, zanim wróg umocni się jeszcze bardziej.'],
+  [1,'Posłać agentów do plemion sprzyjających wrogowi i przekupić je na naszą stronę.']]},
+ {t:'Grupa zamożnych badaczy finansuje wyprawy po stare relikty i głosi, że to, w co wierzy większość, ma całkiem ludzkie źródło. Wierni nazywają ich heretykami i żądają reakcji.',o:[
   [3,'Uregulować wyprawy ustawą: pozwolenia, rejestr znalezisk i nadzór urzędników nad każdym reliktem.'],
   [5,'Nie wtrącać się. Każdy może wierzyć i badać, co chce.'],
-  [2,'Stanąć po stronie Kultu i potępić tezę, że Matka była śmiertelną kobietą.'],
+  [2,'Stanąć po stronie wiary i potępić ich tezy jako herezję.'],
   [0,'Pozwolić uczonym przebadać znaleziska i ogłosić wyniki, cokolwiek z nich wyniknie.']]},
- {t:'Kauppias, wasal Ankist po klęsce Ligi Zatoki, szemra. Doża ma coraz mniej władzy, a lud pogardza obecnością Korony.',o:[
-  [4,'Rozlokować garnizony w portach Kauppias i pokazać, ile kosztuje bunt.'],
-  [1,'Zaprosić Dożę na rozmowy i zaproponować ulgi w zamian za lojalność i dostęp do Banku Kart.'],
-  [3,'Wprowadzić jedno prawo i urzędników Korony, by traktować Kauppias jak każdy inny region.'],
-  [5,'Poszerzyć autonomię kauppiańskich miast. Wolny wasal rzadziej się buntuje.']]},
- {t:'W Dualak rośnie napięcie. Uchodźcy z Enkhal, którzy przybyli w roku 433, mają inne zwyczaje i nie wierzą w Matkę, a sąsiedzi coraz głośniej ich odtrącają.',o:[
-  [2,'Wymagać od przybyszów szacunku dla wiary i obyczajów Ankist, jeśli chcą tu zostać.'],
+ {t:'Niedawno pokonane królestwo, teraz wasal Korony, szemra. Jego władca ma coraz mniej władzy, a lud pogardza obecnością obcych urzędników.',o:[
+  [4,'Rozlokować garnizony w jego portach i pokazać, ile kosztuje bunt.'],
+  [1,'Zaprosić władcę na rozmowy i zaproponować ulgi w zamian za lojalność.'],
+  [3,'Wprowadzić jedno prawo i urzędników Korony, by traktować wasala jak każdy inny region.'],
+  [5,'Poszerzyć autonomię jego miast. Wolny wasal rzadziej się buntuje.']]},
+ {t:'Do jednego z regionów przybyła fala uchodźców z gór. Mają inne zwyczaje, nie dzielą wiary większości, a sąsiedzi coraz głośniej ich odtrącają.',o:[
+  [2,'Wymagać od przybyszów szacunku dla wiary i obyczajów tej ziemi, jeśli chcą tu zostać.'],
   [4,'Wystawić straże w dzielnicach uchodźców i surowo karać każdego, kto podniesie rękę na sąsiada.'],
-  [5,'Uznać prawo Enkhali do własnych wierzeń i zwyczajów, bez narzucania im czegokolwiek.'],
-  [1,'Usiąść z wodzami Enkhali i wynegocjować układ: ziemia i ochrona w zamian za służbę.']]},
- {t:'Przymierze Szeptów donosi, że Czarny Świt mógł wsunąć agentów w szeregi urzędników. Ostatnim razem rozbił królestwo od środka.',o:[
+  [5,'Uznać prawo przybyszów do własnych wierzeń i zwyczajów, bez narzucania im czegokolwiek.'],
+  [1,'Usiąść z ich przywódcami i wynegocjować układ: ziemia i ochrona w zamian za służbę.']]},
+ {t:'Wywiad donosi, że w szeregach urzędników mogą siedzieć agenci tajnej organizacji, która już raz rozbiła królestwo od środka.',o:[
   [0,'Wprowadzić nowe metody śledcze oparte na nauce: analizę pism, rejestry, szyfry.'],
   [3,'Objąć urzędników obowiązkowymi kontrolami i jawnymi procedurami awansu w całym państwie.'],
-  [1,'Pozwolić Szeptom działać po cichu i podrzucić fałszywe wieści, by zobaczyć, kto na nie zareaguje.'],
+  [1,'Pozwolić wywiadowi działać po cichu i podrzucić fałszywe wieści, by zobaczyć, kto na nie zareaguje.'],
   [4,'Aresztować podejrzanych od razu i przesłuchać ich, zanim zdążą uciec.']]},
- {t:'Kupcy z Wylio i Gamam skarżą się na podatki, a wojna drenuje skarbiec. Skąd wziąć pieniądze?',o:[
+ {t:'Kupcy z dwóch bogatych regionów skarżą się na podatki, a wojna drenuje skarbiec. Skąd wziąć pieniądze?',o:[
   [5,'Obniżyć podatki centralne i pozwolić regionom zbierać oraz wydawać większość dochodów.'],
   [2,'Zachować dawny rozkład ciężarów: każdy stan płaci tyle, ile płacił od pokoleń.'],
   [3,'Wprowadzić jeden jawny podatek dla całego królestwa i ściągać go bez wyjątków.'],
   [0,'Zainwestować w kanały i młyny, żeby wpływy rosły, zamiast ściskać tych samych płatników.']]},
- {t:'Poseł z Mhuir, pierwszy w dziejach, mieszka w Lybrze i proponuje rozmowy w sprawie pogranicza. Oba królestwa od wieków żyją w sporze.',o:[
-  [1,'Podjąć rozmowy i zawrzeć traktat. Spokój na północy odciąży wojnę na południu.'],
-  [5,'Otworzyć granicę dla handlu i podróżnych z Mhuir, bez kontroli na każdym kroku.'],
+ {t:'Sąsiednie królestwo, odwieczny rywal, po raz pierwszy przysłało stałego posła i proponuje rozmowy w sprawie pogranicza.',o:[
+  [1,'Podjąć rozmowy i zawrzeć traktat. Spokój na jednej granicy odciąży wojnę na drugiej.'],
+  [5,'Otworzyć granicę dla handlu i podróżnych, bez kontroli na każdym kroku.'],
   [0,'Zaproponować wspólne badania uczonych obu królestw zamiast pielęgnować dawne urazy.'],
   [2,'Rozmawiać, ale pamiętać o dawnych krzywdach i niczego nie ustępować w sprawie granic i starych praw.']]},
- {t:'Widram głosi, że Imperium Słońca było prawdziwą kolebką cywilizacji, a Ankist tylko odebrał mu władzę. Jego hasła docierają do południowych regionów.',o:[
+ {t:'Wódz wroga głosi, że wasza cywilizacja powstała na jego ziemiach i została mu odebrana. Jego hasła docierają do waszych południowych regionów.',o:[
   [4,'Rozbijać zebrania jego zwolenników i karać tych, którzy powtarzają jego hasła.'],
   [3,'Zakazać rozpowszechniania jego pism i objąć cenzurą wszystko, co o nim mówi.'],
-  [5,'Zostawić ludziom prawo słuchania i oceniania. Zakaz uczyniłby z Widrama męczennika.'],
-  [0,'Zlecić uczonym zbadanie dziejów Imperium Słońca i ogłosić dowody, które obalą jego opowieść.']]},
- {t:'Na targu w Roinn pojawiła się mapa, która może być jedną ze Złotych Map Imperium Słońca. Kto ma ją przejąć?',o:[
+  [5,'Zostawić ludziom prawo słuchania i oceniania. Zakaz uczyniłby z wodza męczennika.'],
+  [0,'Zlecić uczonym zbadanie dawnych dziejów i ogłosić dowody, które obalą jego opowieść.']]},
+ {t:'Na targu pojawiła się mapa, która może prowadzić do dawno zapomnionych tajemnic. Kto ma ją przejąć?',o:[
   [2,'Kapłani i stare rody. Dziedzictwo przeszłości należy do jej strażników.'],
   [4,'Oddział żołnierzy, który zajmie mapę i zatrzyma każdego, kto ją widział.'],
   [3,'Urzędnicy Korony, którzy spiszą mapę, opieczętują ją i złożą w skarbcu.'],
@@ -324,7 +324,7 @@ function quizHTML(){
   }).join('');
   return '<div class="qhead"><span class="who">'+esc(p.name)+'</span><span class="muted small">Pytanie '+(S.q+1)+' z '+NQ+'</span></div>'+
     '<div class="bar" aria-hidden="true">'+bar+'</div>'+
-    (S.q===0?'<p class="setting">Rok 440. Królowa Serena walczy w Konfurtah, a Rada rządzi w jej imieniu. Każde pytanie to dylemat, który trafia przed Radę.</p>':'')+
+    (S.q===0?'<p class="setting">Jesteś doradcą królowej, która walczy na dalekiej wojnie. Rada rządzi w jej imieniu, a każde pytanie to dylemat, który trafia przed Radę.</p>':'')+
     '<h2 class="q" data-focus tabindex="-1">'+esc(q.t)+'</h2>'+
     '<div class="opts">'+opts+'</div>'+
     '<div>'+(S.q>0?'<button class="btn ghost quiet" type="button" data-act="back">Wstecz</button>':'')+'</div>';
