@@ -1,0 +1,557 @@
+<title>Losowanie Rady Królowej</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+/* Układ: jedna kolumna, jeden ekran naraz, jak karta podawana przy stole.
+   Motyw przewodni: pierścień sześciu wartości. Każda Postać to jedna krawędź sześciokąta. */
+:root{
+  --bg:#eef0f5; --surface:#ffffff; --surface-2:#e3e7f0; --line:#ccd2e0;
+  --fg:#141927; --muted:#586075; --btn-bg:#141927; --btn-fg:#f3f5fa; --danger:#b3261e;
+  --c-aesyas:#7ab0e6; --c-jilian:#3fbfa3; --c-elinor:#a58ae0;
+  --c-xanthe:#e2574f; --c-syd:#9bbd45; --c-lyrie:#eaa938; --ink:#10141c;
+  --font-display:'Fraunces',Georgia,serif;
+  --font-body:'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e121b; --surface:#171c28; --surface-2:#222a3b; --line:#2e3750;
+    --fg:#e8ebf4; --muted:#9aa4ba; --btn-bg:#e8ebf4; --btn-fg:#0e121b; --danger:#ff8a80;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e121b; --surface:#171c28; --surface-2:#222a3b; --line:#2e3750;
+  --fg:#e8ebf4; --muted:#9aa4ba; --btn-bg:#e8ebf4; --btn-fg:#0e121b; --danger:#ff8a80;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.5 var(--font-body);
+  padding-block:20px 56px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.eyebrow{font:600 12px/1.2 var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h1,h2,h3{font-family:var(--font-display);font-weight:700;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,8vw,40px);line-height:1.05;font-variation-settings:"opsz" 96}
+h2{font-size:22px;line-height:1.2}
+h3{font-size:28px;line-height:1.1}
+p{margin:0}
+.lede{color:var(--muted);max-width:60ch;margin-top:12px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+[tabindex="-1"]:focus{outline:none}
+
+/* przyciski */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  min-height:50px;padding:0 22px;border-radius:12px;border:1.5px solid var(--btn-bg);
+  background:var(--btn-bg);color:var(--btn-fg);font:600 16px var(--font-body);cursor:pointer;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--fg);filter:none}
+.btn.quiet{width:auto;min-height:40px;padding:0 14px;font-size:14px}
+.stack{display:flex;flex-direction:column;gap:10px}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
+
+/* pierścień wartości */
+.hexfig{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center}
+.hex{width:100%;max-width:340px;height:auto;display:block}
+.hex text{font-family:var(--font-body)}
+.hexfig figcaption{font-size:14px;color:var(--muted);text-align:center;max-width:36ch}
+.draw .edge{opacity:.2;transition:opacity .12s}
+.draw .edge.lit{opacity:1}
+
+/* gracze */
+.rows{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;gap:8px}
+.row input[type=text]{
+  flex:1;min-width:0;min-height:46px;padding:0 14px;border-radius:10px;border:1.5px solid var(--line);
+  background:var(--bg);color:var(--fg);font:500 16px var(--font-body);
+}
+.row input[type=text]::placeholder{color:var(--muted);opacity:.8}
+.icon{
+  flex:none;width:46px;min-height:46px;border-radius:10px;border:1.5px solid var(--line);
+  background:transparent;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;
+}
+.icon:hover{color:var(--fg);border-color:var(--fg)}
+.opt-check{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.opt-check input{width:20px;height:20px;margin:2px 0 0;flex:none;accent-color:var(--fg)}
+.err{color:var(--danger);font-size:14px;min-height:1.2em}
+
+/* przekazanie urządzenia */
+.center{display:flex;flex-direction:column;gap:18px;align-items:flex-start;padding-top:8vh}
+.big{font-size:clamp(44px,14vw,76px);line-height:1;overflow-wrap:anywhere;font-variation-settings:"opsz" 144}
+
+/* pytania */
+.qhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.who{font-weight:700}
+.bar{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
+.bar i{height:4px;border-radius:2px;background:var(--line)}
+.bar i.on{background:var(--fg)}
+.q{font-size:clamp(21px,5.6vw,26px);line-height:1.25}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{
+  display:block;width:100%;text-align:left;padding:14px 16px;border-radius:12px;
+  border:1.5px solid var(--line);background:var(--surface);color:var(--fg);
+  font:500 16px/1.4 var(--font-body);cursor:pointer;
+}
+.opt:hover{border-color:var(--fg)}
+.opt[aria-pressed="true"]{border-color:var(--fg);background:var(--surface-2)}
+
+/* gotowość */
+.names{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.names li{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-weight:600}
+.names li:first-child{border-top:0}
+.tick{flex:none;width:22px;height:22px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center}
+
+/* wynik */
+.cards{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.seal{
+  display:flex;flex-direction:column;gap:4px;align-items:flex-start;width:100%;min-height:96px;justify-content:center;
+  padding:18px;border:2px dashed var(--line);border-radius:14px;background:transparent;color:var(--fg);cursor:pointer;text-align:left;
+}
+.seal:hover{border-color:var(--fg)}
+.seal-name{font:700 24px/1.1 var(--font-display)}
+.seal-cta{font-size:14px;color:var(--muted)}
+.band{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 18px;background:var(--cc);color:var(--ink);font-weight:700;font-size:14px}
+.band .pill{font-weight:600;font-size:12px;letter-spacing:.04em}
+.body{padding:18px;display:flex;flex-direction:column;gap:12px}
+.epi{font:500 18px var(--font-display);color:var(--muted);margin-top:-6px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips span{padding:4px 12px;border-radius:999px;background:var(--surface-2);font-weight:600;font-size:13px}
+.fit{font-size:15px}
+details{border-top:1px solid var(--line);padding-top:12px}
+summary{cursor:pointer;font-weight:600;font-size:14px}
+details[open] summary{margin-bottom:10px}
+.fits{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.fits li{display:grid;grid-template-columns:10px 72px 1fr 34px;gap:10px;align-items:center;font-size:14px}
+.fits li.me .fname{font-weight:700}
+.sw{width:10px;height:10px;border-radius:50%}
+.meter{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.meter i{display:block;height:100%}
+.num{font-variant-numeric:tabular-nums;text-align:right;color:var(--muted)}
+.sumrow{display:grid;grid-template-columns:12px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.sumrow:first-of-type{border-top:0}
+.sumrow b{font-family:var(--font-display);font-size:18px}
+.note{font-size:14px;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){.draw .edge{transition:none}}
+</style>
+
+<div class="wrap" id="app"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* Pierścień wartości: kolejność wierzchołków. Postać k broni wartości k oraz k+1. */
+var IDE=['Postęp','Dyplomacja','Tradycja','Porządek','Siła','Wolność'];
+var CH=[
+  {id:'aesyas',name:'Aesyas',epi:'Srebrne Pióro',
+   blurb:'Mentor królowej Sereny i jeden z najbardziej postępowych uczonych królestwa. Reformy prowadzi rozumem i rozmową.',
+   themes:'równowaga między moralnością a postępem, sens nauki'},
+  {id:'jilian',name:'Jilian',epi:'Jedwabny Tkacz',
+   blurb:'Wschodzący dyplomata i negocjator. Perswazja i intryga to jego narzędzia, a dworskie gry o władzę jego żywioł.',
+   themes:'dworskie intrygi i subtelna sztuka gier o władzę'},
+  {id:'elinor',name:'Elinor',epi:'Heroldka Przeszłości',
+   blurb:'Jej ród jest tak stary jak Ankist. Samo jej nazwisko daje wpływ wśród szlachty i Kultu.',
+   themes:'sumienie kontra obowiązek polityczny, prawo religijne kontra świeckie'},
+  {id:'xanthe',name:'Xanthe',epi:'Szkarłatna Tarcza',
+   blurb:'Zaciekła wojowniczka z korzeniami Enkhali, świeżo wyniesiona do szlachty. Najbliższa powierniczka królowej Sereny.',
+   themes:'cnota wojskowa, dziedzictwo kulturowe, integracja'},
+  {id:'syd',name:'Syd',epi:'Dziki',
+   blurb:'Bezwzględny szlachcic z głębokimi związkami z półświatkiem. Nikomu nie ufa i działa w cieniu, z zimną kalkulacją.',
+   themes:'syndykaty przestępcze, walki gangów, narkotykowe monopole'},
+  {id:'lyrie',name:'Lyrie',epi:'Wizjonerska Mecenaska',
+   blurb:'Ikona kultury i założycielka Freedomizmu, radykalnego ruchu artystycznego głoszącego nieskrępowaną samoekspresję.',
+   themes:'wolna myśl, artysta a jego sztuka, wpływ charyzmatycznych postaci'}
+];
+CH.forEach(function(c,k){c.ide=[k,(k+1)%6];});
+
+/* Zalecane składy z instrukcji (s. 10). Indeksy: Aesyas0 Jilian1 Elinor2 Xanthe3 Syd4 Lyrie5 */
+var LINEUPS={
+  3:[[0,1,4],[0,2,4],[0,3,4],[1,5,3]],
+  4:[[0,1,4,3],[2,1,5,4],[0,2,5,3]]
+};
+
+/* Pytania. Każda odpowiedź daje punkt jednej wartości (indeks z IDE).
+   Każda wartość pojawia się dokładnie 6 razy. */
+var Q=[
+ {t:'Na północy nie obrodziło zboże. Królowa pyta Radę, co robić.',o:[
+  [2,'Wrócić do dawnych obrzędów i świątynnych spichlerzy, które przez wieki chroniły przed głodem.'],
+  [0,'Sfinansować nowe uprawy i narzędzia, nawet jeśli wieś przyjmie je z podejrzliwością.'],
+  [4,'Zająć zapasy bogaczy i rozdzielić je pod strażą.'],
+  [1,'Wynegocjować dostawy z sąsiednich regionów w zamian za przysługi na przyszłość.']]},
+ {t:'Wędrowny kaznodzieja zbiera tłumy i głosi coś sprzecznego z nauką Kultu.',o:[
+  [3,'Wezwać go przed sąd. Prawo obowiązuje wszystkich tak samo.'],
+  [5,'Zostawić go w spokoju. Niech mówi, a ludzie sami zdecydują, komu wierzyć.'],
+  [2,'Poprosić Kult o publiczną odpowiedź, zgodną z odwiecznym nauczaniem.'],
+  [0,'Zaprosić go na debatę z uczonymi i sprawdzić, czy jego tezy wytrzymają argumenty.']]},
+ {t:'Dwa regiony spierają się o granicę i oba wystawiły zbrojne straże.',o:[
+  [4,'Wysłać wojsko i rozdzielić je siłą, zanim poleje się pierwsza krew.'],
+  [1,'Zorganizować tajne rozmowy i znaleźć układ, na którym obie strony zachowają twarz.'],
+  [3,'Wytyczyć granicę urzędowo i wyznaczyć sędziów, którzy dopilnują wyroku.'],
+  [5,'Pozwolić regionom samym ustalić zasady współżycia, bez narzucania ich z góry.']]},
+ {t:'Na dworze wykryto zdrajcę, który sprzedawał wieści obcym.',o:[
+  [2,'Osądzić go według dawnego zwyczaju, przy świadkach z wielkich rodów.'],
+  [4,'Rozbić jego siatkę od razu i pokazać, że zdrada kończy się szubienicą.'],
+  [5,'Wysłuchać go. Oskarżenie to jeszcze nie wyrok, a każdy ma prawo do obrony.'],
+  [1,'Zrobić z niego podwójnego agenta i karmić wroga fałszywymi wieściami.']]},
+ {t:'Do królestwa dotarła maszyna, która zastępuje pracę dziesięciu rzemieślników.',o:[
+  [0,'Wprowadzić ją od razu. Rzemieślnicy znajdą nowe zajęcia, a kraj zyska.'],
+  [3,'Uregulować jej użycie ustawą i licencjami, zanim rynek pracy się rozsypie.'],
+  [1,'Usiąść z cechami i dojść do kompromisu: wolniejsze wdrożenie i rekompensaty.'],
+  [4,'Zająć ją na potrzeby armii. Liczy się to, kto ją ma.']]},
+ {t:'Zbliża się coroczne święto koronacji. Jak ma wyglądać?',o:[
+  [5,'Niech każdy region świętuje po swojemu. Wspólny ma być tylko dzień.'],
+  [2,'Tak jak zawsze: ten sam obrządek, te same pieśni, ta sama kolejność.'],
+  [3,'Jeden ceremoniał dla całego królestwa, z jasnym programem i miejscem dla każdego stanu.'],
+  [0,'Nowa formuła: pokaz dokonań uczonych i rzemieślników zamiast procesji.']]},
+ {t:'Obce poselstwo prosi o prawo osiedlenia się w stolicy.',o:[
+  [1,'Przyjąć z honorami i zawrzeć sojusz. Zyskamy przyjaciół i wiedzę o ich zamiarach.'],
+  [5,'Otworzyć bramy. Kto chce tu żyć, powinien móc tu żyć.'],
+  [0,'Przyjąć ich uczonych. Ich wiedza może popchnąć królestwo naprzód.'],
+  [2,'Przyjąć, ale pod warunkiem poszanowania miejscowych obyczajów i wiary.']]},
+ {t:'W jednej z wsi wybuchł bunt przeciw poborowi do armii.',o:[
+  [4,'Stłumić go szybko i zdecydowanie, zanim rozleje się dalej.'],
+  [3,'Przypomnieć, że pobór reguluje prawo, i oddać losowanie pod nadzór urzędników.'],
+  [5,'Pozwolić wsi samej zdecydować, jaką daninę w ludziach lub plonach złoży.'],
+  [0,'Zastąpić pobór opłaconymi, lepiej wyszkolonymi oddziałami zawodowymi.']]},
+ {t:'Ktoś wykradł ze świątyni święty relikt. Kogo wysyłasz po jego odzyskanie?',o:[
+  [2,'Kapłanów i stare rody. Relikt wróci dzięki ludziom, którzy znają jego historię.'],
+  [4,'Najemników z rozkazem przeszukania każdego domu w mieście.'],
+  [3,'Urzędników śledczych, którzy spiszą zeznania i opieczętują każdy dokument.'],
+  [1,'Cichego pośrednika, który dotrze do podziemia i wykupi relikt bez rozgłosu.']]}
+];
+var NQ=Q.length;
+
+/* stan */
+var S={
+  screen:'setup', names:['','','',''], strict:true, err:'',
+  players:[], cur:0, q:0, lock:false,
+  cands:[], used:{}, map:[], left:0, revealed:[]
+};
+try{
+  var saved=JSON.parse(localStorage.getItem('qud-names')||'null');
+  if(saved&&saved.length>=3&&saved.length<=6) S.names=saved.map(String);
+}catch(e){}
+
+var app=document.getElementById('app');
+
+function esc(s){return String(s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function pad(n){return n;}
+
+/* ---------- sześciokąt ---------- */
+function hexSVG(o){
+  o=o||{};
+  var cx=170,cy=152,R=100,s='';
+  function pt(i,r){var a=(-90+60*i)*Math.PI/180;return [cx+r*Math.cos(a),cy+r*Math.sin(a)];}
+  function P(i,r){var p=pt(i,r);return p[0].toFixed(1)+','+p[1].toFixed(1);}
+  var all=[0,1,2,3,4,5];
+  s+='<svg class="hex'+(o.cls?' '+o.cls:'')+'" viewBox="0 0 340 300" role="img" aria-label="'+esc(o.label||'Pierścień sześciu wartości')+'">';
+  [1/3,2/3,1].forEach(function(k){
+    s+='<polygon points="'+all.map(function(i){return P(i,R*k);}).join(' ')+'" fill="none" stroke="var(--line)" stroke-width="1"/>';
+  });
+  all.forEach(function(i){
+    var p=pt(i,R);
+    s+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'" stroke="var(--line)" stroke-width="1"/>';
+  });
+  if(o.scores){
+    s+='<polygon points="'+o.scores.map(function(v,i){return P(i,R*Math.min(1,v/6));}).join(' ')+'" fill="var(--fg)" fill-opacity=".16" stroke="var(--fg)" stroke-width="2" stroke-linejoin="round"/>';
+  }
+  CH.forEach(function(c,k){
+    var a=pt(k,R),b=pt((k+1)%6,R);
+    var on=(o.hi===undefined||o.hi===null)||o.hi===k;
+    s+='<line class="edge" data-edge="'+k+'" x1="'+a[0].toFixed(1)+'" y1="'+a[1].toFixed(1)+'" x2="'+b[0].toFixed(1)+'" y2="'+b[1].toFixed(1)+'" stroke="var(--c-'+c.id+')" stroke-width="'+(on?7:2)+'" stroke-linecap="round"'+(on?'':' opacity=".35"')+'/>';
+  });
+  all.forEach(function(i){
+    var p=pt(i,R+16),ang=(-90+60*i)*Math.PI/180,cs=Math.cos(ang);
+    var anchor=(i===0||i===3)?'middle':(cs>0?'start':'end');
+    var y=p[1]+(i===0?-2:(i===3?12:4));
+    s+='<text x="'+p[0].toFixed(1)+'" y="'+y.toFixed(1)+'" text-anchor="'+anchor+'" font-size="12.5" font-weight="600" fill="var(--fg)">'+IDE[i]+'</text>';
+  });
+  if(o.names){
+    CH.forEach(function(c,k){
+      var ang=(-60+60*k)*Math.PI/180,r=R*0.6;
+      s+='<text x="'+(cx+r*Math.cos(ang)).toFixed(1)+'" y="'+(cy+r*Math.sin(ang)+4).toFixed(1)+'" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--muted)">'+c.name+'</text>';
+    });
+  }
+  s+='</svg>';
+  return s;
+}
+
+/* ---------- ekrany ---------- */
+function setupHTML(){
+  var rows=S.names.map(function(n,i){
+    return '<div class="row"><input type="text" id="n'+i+'" data-name="'+i+'" maxlength="20" autocomplete="off" placeholder="Imię gracza '+(i+1)+'" value="'+esc(n)+'" aria-label="Imię gracza '+(i+1)+'">'+
+      (S.names.length>3?'<button class="icon" type="button" data-act="remove" data-i="'+i+'" aria-label="Usuń gracza '+(i+1)+'">×</button>':'')+'</div>';
+  }).join('');
+  return '<header><div class="eyebrow">Dylemat Królowej</div><h1 data-focus tabindex="-1">Losowanie Rady Królowej</h1>'+
+    '<p class="lede">Wpisz graczy. Każdy po kolei odpowiada po cichu na dziewięć pytań. Dopiero gdy wszyscy skończą, losowanie rozdziela Postacie całemu stołowi naraz.</p></header>'+
+    '<figure class="hexfig">'+hexSVG({names:true,label:'Pierścień wartości: każda Postać broni dwóch sąsiednich wartości'})+
+    '<figcaption>Sześć wartości tworzy pierścień. Każda Postać broni dwóch sąsiednich.</figcaption></figure>'+
+    '<section class="panel"><h2>Gracze</h2><div class="rows">'+rows+'</div>'+
+    (S.names.length<6?'<button class="btn ghost quiet" type="button" data-act="add">Dodaj gracza</button>':'')+
+    '<label class="opt-check" for="strict"><input type="checkbox" id="strict" data-strict '+(S.strict?'checked':'')+'><span><b>Trzymaj się składów z instrukcji</b><br><span class="note">Zalecane składy z s. 10 dla 3 i 4 graczy. Przy 5 i 6 instrukcja nie narzuca składu.</span></span></label>'+
+    '<div class="err" role="alert">'+esc(S.err)+'</div>'+
+    '<button class="btn" type="button" data-act="start">Zacznij quiz</button></section>';
+}
+
+function handoffHTML(){
+  var p=S.players[S.cur],n=S.players.length;
+  return '<div class="center"><div class="eyebrow">Gracz '+(S.cur+1)+' z '+n+'</div>'+
+    '<p class="muted">Przekaż urządzenie do</p>'+
+    '<h1 class="big" data-focus tabindex="-1">'+esc(p.name)+'</h1>'+
+    '<p class="muted">Reszta stołu niech odwróci wzrok. Odpowiedzi zobaczy tylko to urządzenie, wynik poznacie razem.</p>'+
+    '<div class="stack" style="width:100%"><button class="btn" type="button" data-act="begin">Jestem gotów</button>'+
+    (S.cur===0?'<button class="btn ghost" type="button" data-act="reset">Wróć do listy graczy</button>':'')+'</div></div>';
+}
+
+function quizHTML(){
+  var p=S.players[S.cur],q=Q[S.q],sel=p.ans[S.q];
+  var bar='';for(var i=0;i<NQ;i++)bar+='<i class="'+(i<=S.q?'on':'')+'"></i>';
+  var opts=p.order[S.q].map(function(oi){
+    return '<button class="opt" type="button" data-act="pick" data-k="'+oi+'" aria-pressed="'+(sel===oi?'true':'false')+'">'+esc(q.o[oi][1])+'</button>';
+  }).join('');
+  return '<div class="qhead"><span class="who">'+esc(p.name)+'</span><span class="muted small">Pytanie '+(S.q+1)+' z '+NQ+'</span></div>'+
+    '<div class="bar" aria-hidden="true">'+bar+'</div>'+
+    '<h2 class="q" data-focus tabindex="-1">'+esc(q.t)+'</h2>'+
+    '<div class="opts">'+opts+'</div>'+
+    '<div>'+(S.q>0?'<button class="btn ghost quiet" type="button" data-act="back">Wstecz</button>':'')+'</div>';
+}
+
+var CHECK='<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.4l2.3 2.3 4.7-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function readyHTML(){
+  var list=S.players.map(function(p){return '<li><span class="tick">'+CHECK+'</span>'+esc(p.name)+'</li>';}).join('');
+  return '<header><div class="eyebrow">Quiz zakończony</div><h1 data-focus tabindex="-1">Wszyscy odpowiedzieli</h1>'+
+    '<p class="lede">Losowanie bierze pod uwagę odpowiedzi wszystkich naraz. Gdy kilka osób pasuje do tej samej Postaci, o jej przydziale decyduje to, co wyjdzie najlepiej dla całego stołu.</p></header>'+
+    '<section class="panel"><ul class="names">'+list+'</ul>'+
+    '<button class="btn" type="button" data-act="draw">Losuj Radę</button>'+
+    '<button class="btn ghost" type="button" data-act="reset">Zmień graczy</button></section>';
+}
+
+function drawingHTML(){
+  return '<div class="center" style="padding-top:4vh;align-items:center;text-align:center"><div class="eyebrow">Losowanie</div>'+
+    '<h2 data-focus tabindex="-1" aria-live="polite">Rada się zbiera</h2>'+
+    '<div class="draw" style="width:100%">'+hexSVG({names:true,label:'Losowanie Postaci'})+'</div></div>';
+}
+
+/* ---------- obliczenia ---------- */
+function aff(p){return CH.map(function(c){return p.scores[c.ide[0]]+p.scores[c.ide[1]];});}
+
+function subsets(n){
+  var r=[];
+  for(var m=0;m<64;m++){var a=[];for(var i=0;i<6;i++)if(m>>i&1)a.push(i);if(a.length===n)r.push(a);}
+  return r;
+}
+function perms(arr){
+  if(arr.length<=1)return [arr];
+  var out=[];
+  arr.forEach(function(x,i){
+    perms(arr.slice(0,i).concat(arr.slice(i+1))).forEach(function(p){out.push([x].concat(p));});
+  });
+  return out;
+}
+function buildCands(){
+  var n=S.players.length;
+  var sets=(S.strict&&LINEUPS[n])?LINEUPS[n]:subsets(n);
+  var A=S.players.map(aff);
+  var res=[];
+  sets.forEach(function(set){
+    perms(set).forEach(function(pm){
+      var t=0;pm.forEach(function(c,i){t+=Math.sqrt(A[i][c]/9);});
+      res.push({map:pm,total:t});
+    });
+  });
+  S.cands=res;S.used={};
+}
+function pickAssignment(){
+  var best=-1;
+  S.cands.forEach(function(c){if(c.total>best)best=c.total;});
+  var pool=S.cands.filter(function(c){return c.total>=best-0.12&&!S.used[c.map.join(',')];});
+  if(!pool.length)return false;
+  var w=pool.map(function(c){return Math.exp(-(best-c.total)/0.05);});
+  var sum=w.reduce(function(a,b){return a+b;},0),r=Math.random()*sum,k=0;
+  for(;k<pool.length-1;k++){r-=w[k];if(r<=0)break;}
+  var ch=pool[k];
+  S.map=ch.map.slice();
+  S.used[ch.map.join(',')]=true;
+  S.left=pool.length-1;
+  S.revealed=S.players.map(function(){return false;});
+  return true;
+}
+
+function cardHTML(i){
+  if(!S.revealed[i]){
+    return '<article class="card" id="card-'+i+'"><button class="seal" type="button" data-act="reveal" data-i="'+i+'"><span class="seal-name">'+esc(S.players[i].name)+'</span><span class="seal-cta">Odkryj Postać</span></button></article>';
+  }
+  var p=S.players[i],c=S.map[i],ch=CH[c],A=aff(p),mine=A[c];
+  var rank=1+A.filter(function(a){return a>mine;}).length;
+  var max=Math.max.apply(null,A);
+  var tops=[];A.forEach(function(a,k){if(a===max)tops.push(k);});
+  var note='';
+  if(rank===1){note='To Twoje najlepsze dopasowanie.';}
+  else{
+    var t=tops[0];
+    tops.forEach(function(k){if(S.map.indexOf(k)>=0&&S.map.indexOf(k)!==i&&S.map.indexOf(tops[0])<0)t=k;});
+    var h=S.map.indexOf(t);
+    note='Najlepiej pasowała Ci Postać '+CH[t].name+', '+(h>=0?'ale trafiła do gracza '+esc(S.players[h].name)+'.':'której nie ma w tym składzie.');
+  }
+  var order=CH.map(function(_,k){return k;}).sort(function(a,b){return A[b]-A[a];});
+  var fits=order.map(function(k){
+    return '<li class="'+(k===c?'me':'')+'"><span class="sw" style="background:var(--c-'+CH[k].id+')"></span><span class="fname">'+CH[k].name+'</span><span class="meter"><i style="width:'+(A[k]/9*100).toFixed(0)+'%;background:var(--c-'+CH[k].id+')"></i></span><span class="num">'+A[k]+'/9</span></li>';
+  }).join('');
+  return '<article class="card" id="card-'+i+'" style="--cc:var(--c-'+ch.id+')">'+
+    '<div class="band"><span>'+esc(p.name)+'</span><span class="pill">'+(rank===1?'NAJLEPSZE DOPASOWANIE':'WYBÓR #'+rank+' Z 6')+'</span></div>'+
+    '<div class="body"><h3>'+ch.name+'</h3><div class="epi">'+ch.epi+'</div>'+
+    '<div class="chips"><span>'+IDE[ch.ide[0]]+'</span><span>'+IDE[ch.ide[1]]+'</span></div>'+
+    '<p>'+ch.blurb+'</p><p class="note"><b>Motywy:</b> '+ch.themes+'</p>'+
+    '<p class="fit"><b>'+mine+' z '+NQ+'</b> odpowiedzi zgadza się z wartościami tej Postaci. '+note+'</p>'+
+    '<details><summary>Profil odpowiedzi</summary>'+hexSVG({scores:p.scores,hi:c,label:'Profil odpowiedzi gracza '+p.name})+'<ul class="fits">'+fits+'</ul></details></div></article>';
+}
+
+function summaryHTML(){
+  if(S.revealed.some(function(r){return !r;}))return '';
+  var rows=S.players.map(function(p,i){
+    var ch=CH[S.map[i]];
+    return '<div class="sumrow"><span class="sw" style="background:var(--c-'+ch.id+')"></span><span>'+esc(p.name)+'</span><b>'+ch.name+'</b></div>';
+  }).join('');
+  var n=S.players.length;
+  var ok=S.strict&&LINEUPS[n];
+  return '<section class="panel"><h2>Skład Rady</h2><div>'+rows+'</div>'+
+    (ok?'<p class="note">Ten skład jest jednym z zalecanych w instrukcji (s. 10).</p>':'')+'</section>';
+}
+
+function resultHTML(){
+  var cards=S.players.map(function(_,i){return cardHTML(i);}).join('');
+  var anyHidden=S.revealed.some(function(r){return !r;});
+  return '<header><div class="eyebrow">Losowanie zakończone</div><h1 data-focus tabindex="-1">Rada zasiada</h1>'+
+    '<p class="lede">Każdy odkrywa swoją Postać po kolei albo wszyscy naraz.</p></header>'+
+    '<div class="cards" id="cards">'+cards+'</div>'+
+    '<div id="summary">'+summaryHTML()+'</div>'+
+    '<div class="stack">'+
+    (anyHidden?'<button class="btn" type="button" data-act="revealAll">Odkryj wszystkich</button>':'')+
+    '<button class="btn ghost" type="button" data-act="reroll"'+(S.left>0?'':' disabled')+'>'+(S.left>0?'Losuj jeszcze raz':'Brak innych dobrych układów')+'</button>'+
+    '<button class="btn ghost" type="button" data-act="again">Nowa runda z tymi graczami</button>'+
+    '<button class="btn ghost" type="button" data-act="reset">Zmień graczy</button></div>';
+}
+
+/* ---------- render ---------- */
+function render(noScroll){
+  var h='';
+  switch(S.screen){
+    case 'setup':h=setupHTML();break;
+    case 'handoff':h=handoffHTML();break;
+    case 'quiz':h=quizHTML();break;
+    case 'ready':h=readyHTML();break;
+    case 'drawing':h=drawingHTML();break;
+    case 'result':h=resultHTML();break;
+  }
+  app.innerHTML=h;
+  if(!noScroll)window.scrollTo(0,0);
+  var f=app.querySelector('[data-focus]');
+  if(f)try{f.focus({preventScroll:true});}catch(e){}
+}
+
+function startQuiz(names){
+  S.players=names.map(function(n){
+    var order=[];for(var i=0;i<NQ;i++)order.push(shuffle([0,1,2,3]));
+    return {name:n,ans:[],order:order,scores:[0,0,0,0,0,0]};
+  });
+  S.cur=0;S.q=0;S.screen='handoff';render();
+}
+
+function finishPlayer(){
+  var p=S.players[S.cur],s=[0,0,0,0,0,0];
+  p.ans.forEach(function(k,qi){s[Q[qi].o[k][0]]++;});
+  p.scores=s;
+  if(S.cur<S.players.length-1){S.cur++;S.q=0;S.screen='handoff';}
+  else{buildCands();S.screen='ready';}
+  render();
+}
+
+function runDraw(){
+  S.screen='drawing';render();
+  var edges=[].slice.call(app.querySelectorAll('.edge'));
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function done(){S.screen='result';render();}
+  if(reduce){setTimeout(done,400);return;}
+  var step=0,delay=70;
+  (function tick(){
+    edges.forEach(function(e,i){e.classList.toggle('lit',i===step%6);});
+    step++;delay+=14;
+    if(delay<260)setTimeout(tick,delay);
+    else{
+      edges.forEach(function(e){e.classList.add('lit');});
+      setTimeout(done,650);
+    }
+  })();
+}
+
+/* ---------- zdarzenia ---------- */
+app.addEventListener('input',function(e){
+  var t=e.target;
+  if(t.dataset&&t.dataset.name!==undefined){
+    S.names[+t.dataset.name]=t.value;
+    try{localStorage.setItem('qud-names',JSON.stringify(S.names));}catch(x){}
+  }
+});
+app.addEventListener('change',function(e){
+  if(e.target.hasAttribute&&e.target.hasAttribute('data-strict'))S.strict=e.target.checked;
+});
+app.addEventListener('click',function(e){
+  var b=e.target.closest('[data-act]');
+  if(!b)return;
+  var a=b.dataset.act,i=+b.dataset.i;
+  if(a==='add'){if(S.names.length<6){S.names.push('');S.err='';render(true);var el=document.getElementById('n'+(S.names.length-1));if(el)el.focus();}}
+  else if(a==='remove'){S.names.splice(i,1);S.err='';render(true);}
+  else if(a==='start'){
+    var names=S.names.map(function(n){return n.trim();}).filter(Boolean);
+    var low=names.map(function(n){return n.toLowerCase();});
+    if(names.length<3){S.err='Potrzeba co najmniej trzech graczy.';render(true);return;}
+    if(low.some(function(n,k){return low.indexOf(n)!==k;})){S.err='Każde imię musi być inne.';render(true);return;}
+    S.err='';startQuiz(names);
+  }
+  else if(a==='begin'){S.screen='quiz';S.q=0;S.lock=false;render();}
+  else if(a==='pick'){
+    if(S.lock)return;
+    S.lock=true;
+    var p=S.players[S.cur];p.ans[S.q]=+b.dataset.k;
+    [].slice.call(app.querySelectorAll('.opt')).forEach(function(o){o.setAttribute('aria-pressed',o===b?'true':'false');});
+    setTimeout(function(){
+      S.lock=false;
+      if(S.q<NQ-1){S.q++;render();}else finishPlayer();
+    },240);
+  }
+  else if(a==='back'){if(S.q>0&&!S.lock){S.q--;render();}}
+  else if(a==='draw'){pickAssignment();runDraw();}
+  else if(a==='reveal'){
+    S.revealed[i]=true;
+    var card=document.getElementById('card-'+i);
+    if(card){card.outerHTML=cardHTML(i);}
+    var sm=document.getElementById('summary');if(sm)sm.innerHTML=summaryHTML();
+    if(!S.revealed.some(function(r){return !r;}))render(true);
+  }
+  else if(a==='revealAll'){S.revealed=S.players.map(function(){return true;});render(true);}
+  else if(a==='reroll'){
+    if(pickAssignment())render();
+  }
+  else if(a==='again'){
+    var nm=S.players.map(function(p){return p.name;});
+    startQuiz(nm);
+  }
+  else if(a==='reset'){S.screen='setup';S.err='';render();}
+});
+
+render();
+})();
+</script>
