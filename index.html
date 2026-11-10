@@ -420,7 +420,7 @@ function cardHTML(i){
   }).join('');
   return '<article class="card" id="card-'+i+'" style="--cc:var(--c-'+ch.id+')">'+
     '<div class="band"><span>'+esc(p.name)+'</span><span class="pill">'+(rank===1?'NAJLEPSZE DOPASOWANIE':'WYBÓR #'+rank+' Z 6')+'</span></div>'+
-    '<div class="body"><h3>'+ch.name+'</h3><div class="epi">'+ch.epi+'</div>'+
+    '<div class="body"><h3>'+ch.name+'</h3><div class="epi">'+ch.epi+'</div><p class="note"><i>„'+ch.motto+'”</i></p>'+
     '<div class="chips"><span>'+IDE[ch.ide[0]]+'</span><span>'+IDE[ch.ide[1]]+'</span></div>'+
     '<p>'+ch.blurb+'</p><p class="note"><b>Motywy:</b> '+ch.themes+'</p>'+
     '<p class="fit"><b>'+mine+' z '+NQ+'</b> odpowiedzi zgadza się z wartościami tej Postaci. '+note+'</p>'+
