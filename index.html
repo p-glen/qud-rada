@@ -95,6 +95,7 @@ p{margin:0}
 .bar{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
 .bar i{height:4px;border-radius:2px;background:var(--line)}
 .bar i.on{background:var(--fg)}
+.setting{font-size:14px;color:var(--muted);max-width:60ch}
 .q{font-size:clamp(21px,5.6vw,26px);line-height:1.25}
 .opts{display:flex;flex-direction:column;gap:10px}
 .opt{
@@ -155,22 +156,22 @@ details[open] summary{margin-bottom:10px}
 var IDE=['Postęp','Dyplomacja','Tradycja','Porządek','Siła','Wolność'];
 var CH=[
   {id:'aesyas',name:'Aesyas',epi:'Srebrne Pióro',
-   blurb:'Mentor królowej Sereny i jeden z najbardziej postępowych uczonych królestwa. Reformy prowadzi rozumem i rozmową.',
+   blurb:'Mentor Sereny i jeden z najbardziej postępowych umysłów królestwa. To jego rady zmieniły lekkomyślną, niesforną dziewczynę w zdecydowaną królową.',
    themes:'równowaga między moralnością a postępem, sens nauki'},
   {id:'jilian',name:'Jilian',epi:'Jedwabny Tkacz',
-   blurb:'Wschodzący dyplomata i negocjator. Perswazja i intryga to jego narzędzia, a dworskie gry o władzę jego żywioł.',
+   blurb:'W Epoce Nieładu okazał się doradcą do wszystkiego: biegłym w służbie dyplomatycznej, a gdy trzeba, także w knuciu. Słowa i plany tka z równą wprawą.',
    themes:'dworskie intrygi i subtelna sztuka gier o władzę'},
   {id:'elinor',name:'Elinor',epi:'Heroldka Przeszłości',
-   blurb:'Jej ród jest tak stary jak Ankist. Samo jej nazwisko daje wpływ wśród szlachty i Kultu.',
+   blurb:'Jej ród jest tak stary jak samo królestwo, a samo nazwisko daje jej trwały wpływ wśród szlachty i w Kulcie Matki, wstrząsanym od lat Objawieniami Celestyny.',
    themes:'sumienie kontra obowiązek polityczny, prawo religijne kontra świeckie'},
   {id:'xanthe',name:'Xanthe',epi:'Szkarłatna Tarcza',
-   blurb:'Zaciekła wojowniczka z korzeniami Enkhali, świeżo wyniesiona do szlachty. Najbliższa powierniczka królowej Sereny.',
+   blurb:'Niedawno wyniesiona do szlachty wojowniczka z rodu Enkhali, najlepsza przyjaciółka i prawa ręka królowej. Jej lud słynie z broni z Czerwonego Żelaza, ale w Ankist budzi lęk, kpiny i pogardę, bo Enkhali nie wierzą w Matkę.',
    themes:'cnota wojskowa, dziedzictwo kulturowe, integracja'},
   {id:'syd',name:'Syd',epi:'Dziki',
-   blurb:'Bezwzględny szlachcic z głębokimi związkami z półświatkiem. Nikomu nie ufa i działa w cieniu, z zimną kalkulacją.',
+   blurb:'Nieufny, zaciekle niezależny szlachcic z głębokimi powiązaniami z przestępczym półświatkiem. Porusza się w cieniu, z zimną kalkulacją.',
    themes:'syndykaty przestępcze, walki gangów, narkotykowe monopole'},
   {id:'lyrie',name:'Lyrie',epi:'Wizjonerska Mecenaska',
-   blurb:'Ikona kultury i założycielka Freedomizmu, radykalnego ruchu artystycznego głoszącego nieskrępowaną samoekspresję.',
+   blurb:'Potężna postać świata kultury, wizjonerska założycielka i mecenas Freedomizmu, przełomowego ruchu artystycznego poświęconego swobodnej ekspresji.',
    themes:'wolna myśl, artysta a jego sztuka, wpływ charyzmatycznych postaci'}
 ];
 CH.forEach(function(c,k){c.ide=[k,(k+1)%6];});
@@ -184,51 +185,51 @@ var LINEUPS={
 /* Pytania. Każda odpowiedź daje punkt jednej wartości (indeks z IDE).
    Każda wartość pojawia się dokładnie 6 razy. */
 var Q=[
- {t:'Na północy nie obrodziło zboże. Królowa pyta Radę, co robić.',o:[
-  [2,'Wrócić do dawnych obrzędów i świątynnych spichlerzy, które przez wieki chroniły przed głodem.'],
-  [0,'Sfinansować nowe uprawy i narzędzia, nawet jeśli wieś przyjmie je z podejrzliwością.'],
-  [4,'Zająć zapasy bogaczy i rozdzielić je pod strażą.'],
-  [1,'Wynegocjować dostawy z sąsiednich regionów w zamian za przysługi na przyszłość.']]},
- {t:'Wędrowny kaznodzieja zbiera tłumy i głosi coś sprzecznego z nauką Kultu.',o:[
-  [3,'Wezwać go przed sąd. Prawo obowiązuje wszystkich tak samo.'],
-  [5,'Zostawić go w spokoju. Niech mówi, a ludzie sami zdecydują, komu wierzyć.'],
-  [2,'Poprosić Kult o publiczną odpowiedź, zgodną z odwiecznym nauczaniem.'],
-  [0,'Zaprosić go na debatę z uczonymi i sprawdzić, czy jego tezy wytrzymają argumenty.']]},
- {t:'Dwa regiony spierają się o granicę i oba wystawiły zbrojne straże.',o:[
-  [4,'Wysłać wojsko i rozdzielić je siłą, zanim poleje się pierwsza krew.'],
-  [1,'Zorganizować tajne rozmowy i znaleźć układ, na którym obie strony zachowają twarz.'],
-  [3,'Wytyczyć granicę urzędowo i wyznaczyć sędziów, którzy dopilnują wyroku.'],
-  [5,'Pozwolić regionom samym ustalić zasady współżycia, bez narzucania ich z góry.']]},
- {t:'Na dworze wykryto zdrajcę, który sprzedawał wieści obcym.',o:[
-  [2,'Osądzić go według dawnego zwyczaju, przy świadkach z wielkich rodów.'],
-  [4,'Rozbić jego siatkę od razu i pokazać, że zdrada kończy się szubienicą.'],
-  [5,'Wysłuchać go. Oskarżenie to jeszcze nie wyrok, a każdy ma prawo do obrony.'],
-  [1,'Zrobić z niego podwójnego agenta i karmić wroga fałszywymi wieściami.']]},
- {t:'Do królestwa dotarła maszyna, która zastępuje pracę dziesięciu rzemieślników.',o:[
-  [0,'Wprowadzić ją od razu. Rzemieślnicy znajdą nowe zajęcia, a kraj zyska.'],
-  [3,'Uregulować jej użycie ustawą i licencjami, zanim rynek pracy się rozsypie.'],
-  [1,'Usiąść z cechami i dojść do kompromisu: wolniejsze wdrożenie i rekompensaty.'],
-  [4,'Zająć ją na potrzeby armii. Liczy się to, kto ją ma.']]},
- {t:'Zbliża się coroczne święto koronacji. Jak ma wyglądać?',o:[
-  [5,'Niech każdy region świętuje po swojemu. Wspólny ma być tylko dzień.'],
-  [2,'Tak jak zawsze: ten sam obrządek, te same pieśni, ta sama kolejność.'],
-  [3,'Jeden ceremoniał dla całego królestwa, z jasnym programem i miejscem dla każdego stanu.'],
-  [0,'Nowa formuła: pokaz dokonań uczonych i rzemieślników zamiast procesji.']]},
- {t:'Obce poselstwo prosi o prawo osiedlenia się w stolicy.',o:[
-  [1,'Przyjąć z honorami i zawrzeć sojusz. Zyskamy przyjaciół i wiedzę o ich zamiarach.'],
-  [5,'Otworzyć bramy. Kto chce tu żyć, powinien móc tu żyć.'],
-  [0,'Przyjąć ich uczonych. Ich wiedza może popchnąć królestwo naprzód.'],
-  [2,'Przyjąć, ale pod warunkiem poszanowania miejscowych obyczajów i wiary.']]},
- {t:'W jednej z wsi wybuchł bunt przeciw poborowi do armii.',o:[
-  [4,'Stłumić go szybko i zdecydowanie, zanim rozleje się dalej.'],
-  [3,'Przypomnieć, że pobór reguluje prawo, i oddać losowanie pod nadzór urzędników.'],
-  [5,'Pozwolić wsi samej zdecydować, jaką daninę w ludziach lub plonach złoży.'],
-  [0,'Zastąpić pobór opłaconymi, lepiej wyszkolonymi oddziałami zawodowymi.']]},
- {t:'Ktoś wykradł ze świątyni święty relikt. Kogo wysyłasz po jego odzyskanie?',o:[
-  [2,'Kapłanów i stare rody. Relikt wróci dzięki ludziom, którzy znają jego historię.'],
-  [4,'Najemników z rozkazem przeszukania każdego domu w mieście.'],
-  [3,'Urzędników śledczych, którzy spiszą zeznania i opieczętują każdy dokument.'],
-  [1,'Cichego pośrednika, który dotrze do podziemia i wykupi relikt bez rozgłosu.']]}
+ {t:'Wojna w Konfurtah idzie źle. Żołnierze giną w białych piaskach, a Widram siedzi w niezdobytym Nidar Ilak. Jak wesprzeć front?',o:[
+  [2,'Odwołać się do dawnych powinności szlachty i zażądać od wielkich rodów ludzi oraz zapasów, tak jak przed wiekami.'],
+  [0,'Zlecić uczonym nowe sposoby przetrwania na pustyni: studnie, uzdatnianie wody i lepsze lekarstwa.'],
+  [4,'Wysłać kolejne oddziały i uderzyć na Nidar Ilak, zanim Widram umocni się jeszcze bardziej.'],
+  [1,'Posłać agentów do pustynnych plemion i podkupić je przeciw Widramowi.']]},
+ {t:'Zwolennicy Drogi Drabiny finansują wyprawy po relikty Imperium Słońca. Wierni Kultu Matki nazywają ich heretykami i żądają reakcji.',o:[
+  [3,'Uregulować wyprawy ustawą: pozwolenia, rejestr znalezisk i nadzór urzędników nad każdym reliktem.'],
+  [5,'Nie wtrącać się. Każdy może wierzyć i badać, co chce.'],
+  [2,'Stanąć po stronie Kultu i potępić tezę, że Matka była śmiertelną kobietą.'],
+  [0,'Pozwolić uczonym przebadać znaleziska i ogłosić wyniki, cokolwiek z nich wyniknie.']]},
+ {t:'Kauppias, wasal Ankist po klęsce Ligi Zatoki, szemra. Doża ma coraz mniej władzy, a lud pogardza obecnością Korony.',o:[
+  [4,'Rozlokować garnizony w portach Kauppias i pokazać, ile kosztuje bunt.'],
+  [1,'Zaprosić Dożę na rozmowy i zaproponować ulgi w zamian za lojalność i dostęp do Banku Kart.'],
+  [3,'Wprowadzić jedno prawo i urzędników Korony, by traktować Kauppias jak każdy inny region.'],
+  [5,'Poszerzyć autonomię kauppiańskich miast. Wolny wasal rzadziej się buntuje.']]},
+ {t:'W Dualak rośnie napięcie. Uchodźcy z Enkhal, którzy przybyli w roku 433, mają inne zwyczaje i nie wierzą w Matkę, a sąsiedzi coraz głośniej ich odtrącają.',o:[
+  [2,'Wymagać od przybyszów szacunku dla wiary i obyczajów Ankist, jeśli chcą tu zostać.'],
+  [4,'Wystawić straże w dzielnicach uchodźców i surowo karać każdego, kto podniesie rękę na sąsiada.'],
+  [5,'Uznać prawo Enkhali do własnych wierzeń i zwyczajów, bez narzucania im czegokolwiek.'],
+  [1,'Usiąść z wodzami Enkhali i wynegocjować układ: ziemia i ochrona w zamian za służbę.']]},
+ {t:'Przymierze Szeptów donosi, że Czarny Świt mógł wsunąć agentów w szeregi urzędników. Ostatnim razem rozbił królestwo od środka.',o:[
+  [0,'Wprowadzić nowe metody śledcze oparte na nauce: analizę pism, rejestry, szyfry.'],
+  [3,'Objąć urzędników obowiązkowymi kontrolami i jawnymi procedurami awansu w całym państwie.'],
+  [1,'Pozwolić Szeptom działać po cichu i podrzucić fałszywe wieści, by zobaczyć, kto na nie zareaguje.'],
+  [4,'Aresztować podejrzanych od razu i przesłuchać ich, zanim zdążą uciec.']]},
+ {t:'Kupcy z Wylio i Gamam skarżą się na podatki, a wojna drenuje skarbiec. Skąd wziąć pieniądze?',o:[
+  [5,'Obniżyć podatki centralne i pozwolić regionom zbierać oraz wydawać większość dochodów.'],
+  [2,'Zachować dawny rozkład ciężarów: każdy stan płaci tyle, ile płacił od pokoleń.'],
+  [3,'Wprowadzić jeden jawny podatek dla całego królestwa i ściągać go bez wyjątków.'],
+  [0,'Zainwestować w kanały i młyny, żeby wpływy rosły, zamiast ściskać tych samych płatników.']]},
+ {t:'Poseł z Mhuir, pierwszy w dziejach, mieszka w Lybrze i proponuje rozmowy w sprawie pogranicza. Oba królestwa od wieków żyją w sporze.',o:[
+  [1,'Podjąć rozmowy i zawrzeć traktat. Spokój na północy odciąży wojnę na południu.'],
+  [5,'Otworzyć granicę dla handlu i podróżnych z Mhuir, bez kontroli na każdym kroku.'],
+  [0,'Zaproponować wspólne badania uczonych obu królestw zamiast pielęgnować dawne urazy.'],
+  [2,'Rozmawiać, ale pamiętać o dawnych krzywdach i niczego nie ustępować w sprawie granic i starych praw.']]},
+ {t:'Widram głosi, że Imperium Słońca było prawdziwą kolebką cywilizacji, a Ankist tylko odebrał mu władzę. Jego hasła docierają do południowych regionów.',o:[
+  [4,'Rozbijać zebrania jego zwolenników i karać tych, którzy powtarzają jego hasła.'],
+  [3,'Zakazać rozpowszechniania jego pism i objąć cenzurą wszystko, co o nim mówi.'],
+  [5,'Zostawić ludziom prawo słuchania i oceniania. Zakaz uczyniłby z Widrama męczennika.'],
+  [0,'Zlecić uczonym zbadanie dziejów Imperium Słońca i ogłosić dowody, które obalą jego opowieść.']]},
+ {t:'Na targu w Roinn pojawiła się mapa, która może być jedną ze Złotych Map Imperium Słońca. Kto ma ją przejąć?',o:[
+  [2,'Kapłani i stare rody. Dziedzictwo przeszłości należy do jej strażników.'],
+  [4,'Oddział żołnierzy, który zajmie mapę i zatrzyma każdego, kto ją widział.'],
+  [3,'Urzędnicy Korony, którzy spiszą mapę, opieczętują ją i złożą w skarbcu.'],
+  [1,'Cichy pośrednik, który wykupi mapę i dowie się, kto jeszcze jej szuka.']]}
 ];
 var NQ=Q.length;
 
@@ -323,6 +324,7 @@ function quizHTML(){
   }).join('');
   return '<div class="qhead"><span class="who">'+esc(p.name)+'</span><span class="muted small">Pytanie '+(S.q+1)+' z '+NQ+'</span></div>'+
     '<div class="bar" aria-hidden="true">'+bar+'</div>'+
+    (S.q===0?'<p class="setting">Rok 440. Królowa Serena walczy w Konfurtah, a Rada rządzi w jej imieniu. Każde pytanie to dylemat, który trafia przed Radę.</p>':'')+
     '<h2 class="q" data-focus tabindex="-1">'+esc(q.t)+'</h2>'+
     '<div class="opts">'+opts+'</div>'+
     '<div>'+(S.q>0?'<button class="btn ghost quiet" type="button" data-act="back">Wstecz</button>':'')+'</div>';
