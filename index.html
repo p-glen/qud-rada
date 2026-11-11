@@ -190,7 +190,7 @@ var LINEUPS={
 
 /* Pytania. Każda odpowiedź daje punkt jednej wartości (indeks z IDE).
    Każda wartość pojawia się dokładnie 6 razy. */
-var Q=[
+var QV=[
  {t:'Ekipa wspinaczy jest w połowie drogi na szczyt. Pogoda się psuje, a zapasy topnieją szybciej, niż planowano. Co robicie?',o:[
   [2,'Trzymać się trasy i zasad sprawdzonych przez poprzednie pokolenia wspinaczy.'],
   [0,'Zastosować nowy sprzęt i metodę, której nikt jeszcze nie próbował, ale która może skrócić drogę.'],
@@ -237,7 +237,160 @@ var Q=[
   [3,'Urzędnik, który spisze dokumenty, opieczętuje je i złoży w archiwum.'],
   [1,'Cichy pośrednik, który wykupi skrzynię i dowie się, kto jeszcze jej szuka.']]}
 ];
+QV=QV.concat([
+ {t:'Dyrektor szkoły chce poprawić wyniki uczniów. Jaką drogę wybierasz?',o:[
+  [0,'Zebrać dane o tym, co działa, i wypróbować nowe metody nauczania.'],
+  [3,'Ujednolicić program, wprowadzić jednakowe egzaminy i jasne zasady oceniania.'],
+  [2,'Wrócić do sprawdzonych metod, które szkoła stosowała od pokoleń.'],
+  [5,'Pozwolić uczniom wybierać przedmioty i tempo nauki.']]},
+ {t:'Dwie sąsiednie dzielnice kłócą się o to, gdzie powinien stanąć targ. Co robisz?',o:[
+  [1,'Zaprosić przedstawicieli obu stron i wypracować kompromis, na którym obie coś zyskają.'],
+  [4,'Postawić ultimatum: albo zgoda do końca tygodnia, albo decyzja zapadnie bez nich.'],
+  [3,'Zastosować obowiązujące przepisy o lokalizacji targów i wydać jedną, wiążącą decyzję.'],
+  [5,'Pozwolić każdej dzielnicy otworzyć własny targ i zostawić ich w spokoju.']]},
+ {t:'Rodzinna firma jest w kryzysie. Konkurencja jest tańsza, a zamówień ubywa.',o:[
+  [0,'Przejść na nowe technologie, nawet jeśli to oznacza gruntowną zmianę sposobu pracy.'],
+  [1,'Znaleźć partnera strategicznego i podzielić się wpływami, by przetrwać.'],
+  [2,'Trzymać się rzemiosła i jakości, na których zbudowano markę, i przeczekać.'],
+  [4,'Natychmiast ciąć koszty i pożegnać się z najsłabszymi ogniwami.']]},
+ {t:'Na festiwalu sztuki w mieście pojawia się instalacja, która mocno oburza część mieszkańców.',o:[
+  [5,'Zostawić ją. Sztuka ma prawo prowokować.'],
+  [2,'Usunąć ją. Narusza dobre obyczaje, na których opiera się życie wspólnoty.'],
+  [3,'Oddać sprawę komisji, która oceni ją według spisanego regulaminu festiwalu.'],
+  [1,'Usiąść z artystą i mieszkańcami, żeby wspólnie znaleźć rozwiązanie.']]},
+ {t:'Młodzi pracownicy łamią firmowe zasady, ale osiągają świetne wyniki.',o:[
+  [4,'Ukarać ich surowo, by pozostali nie poszli w ich ślady.'],
+  [3,'Egzekwować regulamin wobec wszystkich jednakowo, niezależnie od efektów.'],
+  [5,'Tolerować to. Wyniki mówią same za siebie.'],
+  [0,'Zbadać, czemu ich metody działają, i przenieść je do całej firmy.']]},
+ {t:'W dzielnicy rośnie liczba kradzieży. Mieszkańcy domagają się reakcji.',o:[
+  [4,'Wysłać mocne patrole i pokazać, że przestępcy nie są tu mile widziani.'],
+  [3,'Wprowadzić jawny rejestr zgłoszeń, monitoring i stałe procedury interwencji.'],
+  [0,'Przeanalizować dane o zdarzeniach i dopiero wtedy ustalić, gdzie działać.'],
+  [1,'Porozmawiać z lokalnymi grupami i liderami, by sami rozwiązali problem.']]},
+ {t:'Rodzeństwo dziedziczy po przodkach dom z długą historią. Każde chce czegoś innego.',o:[
+  [2,'Zachować dom w rodzinie dokładnie takim, jaki zostawili przodkowie.'],
+  [5,'Sprzedać dom i dać każdemu wolną rękę w dysponowaniu swoją częścią.'],
+  [1,'Usiąść razem i wypracować ugodę, która da każdemu coś ważnego.'],
+  [4,'Przejąć dom tak, żeby nikt się nie sprzeciwił, a resztę spłacić.']]},
+ {t:'Grupa przyjaciół planuje wspólną podróż i nie może się zgodzić co do trasy.',o:[
+  [0,'Wybrać trasę, której nikt jeszcze nie próbował, i zobaczyć, co z tego wyjdzie.'],
+  [2,'Wrócić do trasy, którą znamy i która nas nigdy nie zawiodła.'],
+  [1,'Wysłuchać wszystkich i zbudować plan, w którym każdy znajdzie coś dla siebie.'],
+  [3,'Ustalić jeden szczegółowy harmonogram i trzymać się go bez dyskusji.']]},
+ {t:'Do zespołu dołącza nowa osoba i pyta, jak najlepiej się wdrożyć.',o:[
+  [0,'Zachęcić ją do eksperymentowania i sprawdzania, co działa lepiej niż dotąd.'],
+  [2,'Przedstawić jej tradycje zespołu i to, czego nauczyli się starsi koledzy.'],
+  [4,'Rzucić ją na głęboką wodę. Kto da radę, ten zostanie.'],
+  [5,'Dać jej swobodę. Niech uczy się po swojemu.']]}
+]);
+
+/* Pytania o temperament. Każda odpowiedź daje punkt jednej Postaci (6 + indeks).
+   Każde pytanie ma 6 wersji, a do gry wchodzą 4 (bez dwóch wskazanych w OM).
+   Kolejność: Aesyas, Jilian, Elinor, Xanthe, Syd, Lyrie. */
+var QS=[
+ ['Trafiasz na przyjęcie, na którym nikogo nie znasz. Co robisz?',[
+  'Obserwuję ludzi z boku i spokojnie układam sobie w głowie, kto jest kim.',
+  'Szybko zbieram wokół siebie kółko słuchaczy. Lubię być w centrum rozmowy.',
+  'Szukam osób z dobrych, znanych rodzin. Z nimi mam wspólny język.',
+  'Podchodzę do pierwszej osoby i mówię prosto, kim jestem i czego chcę.',
+  'Trzymam się blisko ściany i wypatruję, komu nie można ufać.',
+  'Zagaduję najdziwniejszą osobę na sali. Takich rozmów szukam.']],
+ ['Ktoś publicznie Cię krytykuje. Jak reagujesz?',[
+  'Analizuję zarzuty chłodno i odpowiadam argumentami, jeśli są słuszne.',
+  'Obracam sytuację w żart tak, by to krytyk wyszedł na niezręcznego.',
+  'Nie zmieniam zdania. Moje przekonania nie zależą od tego, kto je kwestionuje.',
+  'Mówię wprost, że się nie zgadzam, i jestem gotów to udowodnić.',
+  'Zapamiętuję, kto mówił, i odpłacam się w odpowiednim momencie.',
+  'Reakcja oznacza, że przekaz dotarł. Prowokacja bywa potrzebna, żeby ludzie się ruszyli.']],
+ ['Jak najchętniej wygrywasz spór?',[
+  'Zbieram dane i przykłady, aż argumenty stają się niepodważalne.',
+  'Dobieram słowa tak, by druga strona sama doszła do mojego wniosku.',
+  'Powołuję się na to, co od dawna uznane za prawdę. Sprawdzone nie wymaga obrony.',
+  'Nie owijam w bawełnę. Mocne słowa i jasne stanowisko przemawiają najlepiej.',
+  'Szukam słabego punktu przeciwnika i naciskam dokładnie tam.',
+  'Opowiadam obraz albo historię, która porusza bardziej niż argumenty.']],
+ ['Co najbardziej cenisz u współpracownika?',[
+  'Dociekliwość i umiejętność zadawania trafnych pytań.',
+  'Zręczność w rozmowie i wyczucie, co komu powiedzieć.',
+  'Wierność zasadom i szacunek dla tego, co zbudowali poprzednicy.',
+  'Odwagę i lojalność, kiedy robi się trudno.',
+  'Samodzielność i umiejętność radzenia sobie bez niczyjej pomocy.',
+  'Wyobraźnię i odwagę do niekonwencjonalnych pomysłów.']],
+ ['Plan, nad którym długo pracowałeś, zaczyna się sypać. Co robisz?',[
+  'Zatrzymuję się, analizuję, co zawiodło, i buduję nowy plan.',
+  'Improwizuję. Zwykle wychodzi mi to lepiej niż trzymanie się planu.',
+  'Wracam do podstaw, które nigdy nie zawiodły.',
+  'Biorę na siebie najtrudniejsze zadanie i idę do przodu.',
+  'Szukam, jak na tym skorzystać, bo w chaosie zawsze coś się znajdzie.',
+  'Widzę w tym szansę na coś zupełnie nowego.']],
+ ['Jak podejmujesz ważną decyzję?',[
+  'Rozważam spokojnie, długo i metodycznie.',
+  'Słucham opinii i plotek, a potem robię to, na co mam ochotę.',
+  'Pytam, co zrobiliby moi przodkowie albo mistrzowie.',
+  'Decyduję szybko i trzymam się decyzji.',
+  'Ufam tylko własnemu osądowi i nikomu nie tłumaczę powodów.',
+  'Idę za intuicją i wizją, nawet jeśli inni jej nie widzą.']],
+ ['Ktoś nie dotrzymał danej Ci obietnicy. Jak to przyjmujesz?',[
+  'Zastanawiam się, co to mówi o tej osobie, i wyciągam wnioski na przyszłość.',
+  'Udaję, że nic się nie stało, i zapamiętuję. Kiedyś się przyda.',
+  'Traktuję to jako zerwanie więzi. Honor nie podlega negocjacjom.',
+  'Mówię o tym od razu i otwarcie. Nie znoszę niedomówień.',
+  'Przestaję ufać tej osobie na dobre.',
+  'Staram się zrozumieć powody. Ludzie są bardziej złożeni niż ich słowa.']],
+ ['Czym chciałbyś zostać zapamiętany?',[
+  'Odkryciem, które zmieniło sposób myślenia innych.',
+  'Opowieścią, którą ludzie będą powtarzać z uśmiechem.',
+  'Rodem i dziedzictwem, które przetrwały.',
+  'Czynem odwagi i wierności w ciężkiej chwili.',
+  'Tym, że nikt nie zdołał mnie złamać.',
+  'Dziełem, które otworzyło ludziom oczy.']],
+ ['Masz wolny wieczór tylko dla siebie. Jak go spędzasz?',[
+  'Książka, notatki i cisza.',
+  'Przyjęcie, rozmowy i najnowsze plotki.',
+  'Kolacja rodzinna i stare opowieści.',
+  'Trening albo sparing, żeby sprawdzić formę.',
+  'Samotny spacer po mniej bezpiecznej części miasta.',
+  'Wernisaż, koncert albo wieczór z improwizowaną muzyką.']],
+ ['Jak traktujesz prawo i regulaminy?',[
+  'Reguły są tak dobre, jak dane, na których je oparto. Poprawiam je, gdy trzeba.',
+  'Prawo to gra. Kto zna reguły, ten potrafi się nimi bawić.',
+  'Prawo wyrasta z tradycji. Szanuję je, nawet gdy bywa niewygodne.',
+  'Jasne reguły i silni, uczciwi ludzie, którzy ich pilnują.',
+  'Prawo to narzędzie silnych. Przestrzegam go, gdy mi się opłaca.',
+  'Zbyt ciasne reguły dławią ludzi. Wolę zasady, które można przekraczać.']],
+ ['Zawiodła Cię bliska osoba. Co robisz?',[
+  'Analizuję, co zawiodło, i wyciągam wnioski bez emocji.',
+  'Rozgrywam to dyplomatycznie, by nie stracić jej na dobre.',
+  'Rodzina i honor wymagają, by dać szansę, ale po surowej rozmowie.',
+  'Mówię wprost, że mnie zawiodła, a potem pomagam to naprawić.',
+  'Odcinam się. Zaufanie nie wraca.',
+  'Przerabiam to na twórczość. Piszę, maluję albo gram.']],
+ ['Odnosisz nieoczekiwany sukces. Jak go przyjmujesz?',[
+  'Sprawdzam, dlaczego się udało, żeby to powtórzyć.',
+  'Dbam, żeby wszyscy o tym usłyszeli.',
+  'Dziękuję przodkom i nauczycielom, dzięki którym tu jestem.',
+  'Dzielę zwycięstwo z tymi, którzy walczyli obok mnie.',
+  'Zachowuję spokój i rozglądam się, kto będzie chciał się z tego pożywić.',
+  'Chcę, żeby ten sukces zainspirował innych do odważnych kroków.']]
+];
+var OM=[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[1,5],[2,4],[2,5],[3,4],[3,5],[4,5]];
+var QSX=QS.map(function(x,i){
+  var o=[];for(var c=0;c<6;c++)if(OM[i].indexOf(c)<0)o.push([6+c,x[1][c]]);
+  return {t:x[0],o:o};
+});
+/* Przeplot: dwa pytania o wartości, jedno o temperament (co jakiś czas po trzy). */
+var Q=[],vi=0,si=0,gaps=[2,3,2,3,2,3,2,3,2,3,2,3];
+while(vi<QV.length||si<QSX.length){
+  for(var g=0;g<(gaps[si]||2)&&vi<QV.length;g++)Q.push(QV[vi++]);
+  if(si<QSX.length)Q.push(QSX[si++]);
+}
 var NQ=Q.length;
+var NV=QV.length;
+var IDEAPP=QV.length*4/6;                 /* ile razy pojawia się każda wartość */
+var TRAPP=QSX.length*4/6;                 /* ile razy pojawia się każda Postać  */
+var AFFMAX=NV+TRAPP;                      /* maksymalne dopasowanie */
+
 
 /* stan */
 var S={
@@ -272,7 +425,7 @@ function hexSVG(o){
     s+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0].toFixed(1)+'" y2="'+p[1].toFixed(1)+'" stroke="var(--line)" stroke-width="1"/>';
   });
   if(o.scores){
-    s+='<polygon points="'+o.scores.map(function(v,i){return P(i,R*Math.min(1,v/6));}).join(' ')+'" fill="var(--fg)" fill-opacity=".16" stroke="var(--fg)" stroke-width="2" stroke-linejoin="round"/>';
+    s+='<polygon points="'+o.scores.map(function(v,i){return P(i,R*Math.min(1,v/Math.max(1,IDEAPP*0.7)));}).join(' ')+'" fill="var(--fg)" fill-opacity=".16" stroke="var(--fg)" stroke-width="2" stroke-linejoin="round"/>';
   }
   CH.forEach(function(c,k){
     var a=pt(k,R),b=pt((k+1)%6,R);
@@ -354,7 +507,7 @@ function drawingHTML(){
 }
 
 /* ---------- obliczenia ---------- */
-function aff(p){return CH.map(function(c){return p.scores[c.ide[0]]+p.scores[c.ide[1]];});}
+function aff(p){return CH.map(function(c,k){return p.scores[c.ide[0]]+p.scores[c.ide[1]]+p.tr[k];});}
 
 function subsets(n){
   var r=[];
@@ -376,7 +529,7 @@ function buildCands(){
   var res=[];
   sets.forEach(function(set){
     perms(set).forEach(function(pm){
-      var t=0;pm.forEach(function(c,i){t+=Math.sqrt(A[i][c]/9);});
+      var t=0;pm.forEach(function(c,i){t+=Math.sqrt(A[i][c]/AFFMAX);});
       res.push({map:pm,total:t});
     });
   });
@@ -385,9 +538,9 @@ function buildCands(){
 function pickAssignment(){
   var best=-1;
   S.cands.forEach(function(c){if(c.total>best)best=c.total;});
-  var pool=S.cands.filter(function(c){return c.total>=best-0.12&&!S.used[c.map.join(',')];});
+  var pool=S.cands.filter(function(c){return c.total>=best-0.08&&!S.used[c.map.join(',')];});
   if(!pool.length)return false;
-  var w=pool.map(function(c){return Math.exp(-(best-c.total)/0.05);});
+  var w=pool.map(function(c){return Math.exp(-(best-c.total)/0.03);});
   var sum=w.reduce(function(a,b){return a+b;},0),r=Math.random()*sum,k=0;
   for(;k<pool.length-1;k++){r-=w[k];if(r<=0)break;}
   var ch=pool[k];
@@ -416,14 +569,14 @@ function cardHTML(i){
   }
   var order=CH.map(function(_,k){return k;}).sort(function(a,b){return A[b]-A[a];});
   var fits=order.map(function(k){
-    return '<li class="'+(k===c?'me':'')+'"><span class="sw" style="background:var(--c-'+CH[k].id+')"></span><span class="fname">'+CH[k].name+'</span><span class="meter"><i style="width:'+(A[k]/9*100).toFixed(0)+'%;background:var(--c-'+CH[k].id+')"></i></span><span class="num">'+A[k]+'/9</span></li>';
+    return '<li class="'+(k===c?'me':'')+'"><span class="sw" style="background:var(--c-'+CH[k].id+')"></span><span class="fname">'+CH[k].name+'</span><span class="meter"><i style="width:'+(A[k]/AFFMAX*100).toFixed(0)+'%;background:var(--c-'+CH[k].id+')"></i></span><span class="num">'+Math.round(A[k]/AFFMAX*100)+'%</span></li>';
   }).join('');
   return '<article class="card" id="card-'+i+'" style="--cc:var(--c-'+ch.id+')">'+
     '<div class="band"><span>'+esc(p.name)+'</span><span class="pill">'+(rank===1?'NAJLEPSZE DOPASOWANIE':'WYBÓR #'+rank+' Z 6')+'</span></div>'+
     '<div class="body"><h3>'+ch.name+'</h3><div class="epi">'+ch.epi+'</div><p class="note"><i>„'+ch.motto+'”</i></p>'+
     '<div class="chips"><span>'+IDE[ch.ide[0]]+'</span><span>'+IDE[ch.ide[1]]+'</span></div>'+
     '<p>'+ch.blurb+'</p><p class="note"><b>Motywy:</b> '+ch.themes+'</p>'+
-    '<p class="fit"><b>'+mine+' z '+NQ+'</b> odpowiedzi zgadza się z wartościami tej Postaci. '+note+'</p>'+
+    '<p class="fit"><b>'+Math.round(mine/AFFMAX*100)+'%</b> zgodności z wartościami i temperamentem tej Postaci. '+note+'</p>'+
     '<details><summary>Profil odpowiedzi</summary>'+hexSVG({scores:p.scores,hi:c,label:'Profil odpowiedzi gracza '+p.name})+'<ul class="fits">'+fits+'</ul></details></div></article>';
 }
 
@@ -473,15 +626,15 @@ function render(noScroll){
 function startQuiz(names){
   S.players=names.map(function(n){
     var order=[];for(var i=0;i<NQ;i++)order.push(shuffle([0,1,2,3]));
-    return {name:n,ans:[],order:order,scores:[0,0,0,0,0,0]};
+    return {name:n,ans:[],order:order,scores:[0,0,0,0,0,0],tr:[0,0,0,0,0,0]};
   });
   S.cur=0;S.q=0;S.screen='handoff';render();
 }
 
 function finishPlayer(){
-  var p=S.players[S.cur],s=[0,0,0,0,0,0];
-  p.ans.forEach(function(k,qi){s[Q[qi].o[k][0]]++;});
-  p.scores=s;
+  var p=S.players[S.cur],s=[0,0,0,0,0,0],tr=[0,0,0,0,0,0];
+  p.ans.forEach(function(k,qi){var v=Q[qi].o[k][0];if(v<6)s[v]++;else tr[v-6]++;});
+  p.scores=s;p.tr=tr;
   if(S.cur<S.players.length-1){S.cur++;S.q=0;S.screen='handoff';}
   else{buildCands();S.screen='ready';}
   render();
